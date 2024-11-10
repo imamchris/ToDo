@@ -4,10 +4,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Homepage</title>
-        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <h1> Welcome to my Flask </h1>
         <p> This is a simple Flask application that uses the Jinja2 templating engine to render HTML templates. </p>
     </body>
+
+    <a action="{{ url_for('login') }}" method="get">
+        <button>Login</button>
+    </a>
+
 </html>
+
