@@ -6,12 +6,20 @@ body {
     padding: 0;
 }
 
-header {
-    background-color: #4caf50; /* Green header */
+/* header {
+    background-color: #1b5e20; 
     color: white;
     padding: 10px 0;
     text-align: center;
     font-size: 24px;
+} */
+
+h1{
+    background-color: #1b5e20; /* Even darker green header */
+    color: white;
+    padding: 10px 0;
+    text-align: left;
+    font-size: 24px; 
 }
 
 .container {
@@ -41,7 +49,7 @@ header {
 }
 
 button {
-    background-color: #4caf50; /* Green buttons */
+    background-color: #1b5e20; /* Even darker green buttons */
     color: white;
     border: none;
     padding: 10px 15px;
@@ -51,7 +59,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background-color: #0d3d14; /* Even darker green on hover */
 }
 
 button.delete {
