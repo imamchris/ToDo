@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from werkzeug.security import generate_password_hash
 
 # Database setup
-DATABASE_URL = "sqlite:///test.db"  # Replace with your actual database URL
+DATABASE_URL = "sqlite:///todo.db"  # Updated to use todo.db
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 
@@ -14,7 +14,8 @@ class User(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     password = Column(String, nullable=False)
 
-# Create the table
+# Drop the existing users table if it exists and create the table
+Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 
 # Create a new session
