@@ -7,13 +7,24 @@
     <title>Login Page</title>
 </head>
 <body>
+
+    <h3>Login</h3>
     <div class="login-container">
-        <h3>Login</h3>
-        <form action="/login" method="post">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="text" name="password" placeholder="Password" required>
-        </form>
-        <button type="submit">Login</button>
+        <!-- Flash message section -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
     </div>
+    <form action="/login" method="post">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="text" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
 </body>
 </html>
