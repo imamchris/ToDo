@@ -11,7 +11,7 @@ engine = create_engine(DATABASE_URI)
 with engine.connect() as conn:
     conn.execute(text("DROP TABLE IF EXISTS users"))
     conn.execute(text("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password_hash TEXT)"))
-    conn.execute(text("INSERT OR IGNORE INTO users (username, password_hash) VALUES ('user', 'password')"))
+    conn.execute(text("INSERT OR IGNORE INTO users (username, password_hash) VALUES ('testuser', 'testpassword')"))
 
 @app.route('/')
 def home():
