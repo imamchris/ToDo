@@ -11,7 +11,7 @@ engine = create_engine(DATABASE_URI)
 with engine.connect() as conn:
     conn.execute(text("DROP TABLE IF EXISTS users"))
     conn.execute(text("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password_hash TEXT)"))
-    conn.execute(text("INSERT OR IGNORE INTO users (username, password_hash) VALUES ('example_user', 'example_password')"))
+    conn.execute(text("INSERT OR IGNORE INTO users (username, password_hash) VALUES ('user', 'password')"))
 
 @app.route('/')
 def home():
@@ -35,6 +35,14 @@ def login():
             flash('Invalid username or password', 'danger')
     
     return render_template('login.html')
+
+@app.route('/dashboard')
+def dashboard():
+    if 'user_id' not in session:
+        flash('You need to login first', 'warning')
+        return redirect(url_for('login'))
+    
+    return render_template('dashboard.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

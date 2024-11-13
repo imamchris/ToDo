@@ -6,18 +6,12 @@ body {
     padding: 0;
 }
 
-/* header {
-    background-color: #1b5e20; 
-    color: white;
-    padding: 10px 0;
-    text-align: center;
-    font-size: 24px;
-} */
-
 h1{
     background-color: #1b5e20; /* Even darker green header */
     color: white;
-    padding: 10px 0;
+    padding: 10px ;
+    margin: 2px;
+    padding-left: 10px;
     text-align: left;
     font-size: 24px; 
 }
