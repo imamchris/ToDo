@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from sqlalchemy import create_engine, text
 import os, secrets
 
@@ -27,6 +27,8 @@ def login():
             result = conn.execute(text("SELECT * FROM users WHERE username = :username"), {'username': username}).fetchone()
         
         if result and result['password_hash'] == password:
+            session['user_id'] = result['id']
+            session['username'] = result['username']
             flash('Login successful!', 'success')
             return redirect(url_for('home'))
         else:
