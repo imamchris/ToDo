@@ -7,18 +7,19 @@
         <title>Homepage</title>
     </head>
     <body>
+        
         <h1> To Do List </h1>
         <p> This is a simple Flask application that uses the Jinja2 templating engine to render HTML templates. </p>
-    <div style="display: flex; gap: 10px;">
-        <form action="{{ url_for('login') }}" method="get">
-            <button type="submit">Login</button>
-        </form>
+        
+        <div style="display: flex; gap: 10px;">
+            <form action="{{ url_for('login') }}" method="get">
+                <button type="submit">Login</button>
+            </form>
 
-        <form action="{{ url_for('signup') }}" method="get">
-            <button type="submit">Signup</button>
-        </form>
-    </div>
-        </form>
-    </div>
+            <form action="{{ url_for('signup') }}" method="get">
+                <button type="submit">Signup</button>
+            </form>
+        </div>
+    
     </body>
 </html>

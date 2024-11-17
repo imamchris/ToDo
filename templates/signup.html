@@ -25,4 +25,13 @@
         {% endif %}
     {% endwith %}
 </body>
+
+<footer>
+    <div class="container">
+        <form action="{{ url_for('home') }}" method="get">
+            <button type="submit">Home</button>
+        </form>
+    </div>
+</footer>
+
 </html>

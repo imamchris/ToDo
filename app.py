@@ -15,6 +15,7 @@ with engine.connect() as conn:
     conn.execute(text("DROP TABLE IF EXISTS users"))
     conn.execute(text("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password_hash TEXT)"))
     conn.execute(text("INSERT OR IGNORE INTO users (username, password_hash) VALUES ('testuser', :password_hash)"), {'password_hash': generate_password_hash('testpassword')})
+    conn.commit()
 
 @app.route('/')
 def home():
@@ -33,6 +34,7 @@ def login():
             session['user_id'] = result.id
             session['username'] = result.username
             flash('Login successful!', 'success')
+            flash('')  # Reset the flash text
             return redirect(url_for('dashboard'))
         else:
             flash('Invalid username or password', 'danger')
@@ -62,6 +64,7 @@ def signup():
             else:
                 password_hash = generate_password_hash(password)
                 conn.execute(text("INSERT INTO users (username, password_hash) VALUES (:username, :password_hash)"), {'username': username, 'password_hash': password_hash})
+                conn.commit()
                 flash('Registration successful! Please login.', 'success')
                 return redirect(url_for('login'))
     
