@@ -4,13 +4,47 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+            #top {
+                text-align: left;
+                background-color: darkolivegreen;
+                padding: 10px;
+                color: white;
+            }
+
+            hr{
+                border: 1px solid darkolivegreen;
+            }
+
+            body{
+                color:white
+            }
+
+            #box{
+                background-color: black;
+                padding: 10px;
+                color: white;
+                margin-top: 10px;
+            }
+             
+        </style>
+
         <title>Homepage</title>
     </head>
-    <body>
-        
-        <div class="container">
+    
+    <header>    
+        <div class="container", id="top">
             <h1 class="mt-5">To Do List</h1>
-            <p>This is a simple Flask application that uses the Jinja2 templating engine to render HTML templates.</p>
+        </div>
+    </header>
+    
+    <hr>
+
+    <body>
+    
+
+        <div class="container", id="box">
+            <p>Welcome to the St Augustine ToDo List please enter your login details</p>
             
             <div class="d-flex gap-2">
                 <form action="{{ url_for('login') }}" method="get">
