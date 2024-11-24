@@ -19,10 +19,13 @@ with engine.connect() as conn:
     conn.execute(text("CREATE TABLE todos (id INTEGER PRIMARY KEY, user_id INTEGER, name TEXT, description TEXT, completed BOOLEAN, FOREIGN KEY(user_id) REFERENCES users(id))"))
     conn.commit()
 
+# Home
 @app.route('/')
 def home():
     return render_template('index.html')
 
+
+# Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -42,6 +45,8 @@ def login():
     
     return render_template('login.html')
 
+
+# Dashboard
 @app.route('/dashboard')
 def dashboard():
     if 'user_id' not in session:
@@ -108,6 +113,8 @@ def logout():
     flash('You have been logged out.', 'success')
     return redirect(url_for('login'))
 
+
+# Signup
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -127,6 +134,8 @@ def signup():
                 return redirect(url_for('login'))
     
     return render_template('signup.html')
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
