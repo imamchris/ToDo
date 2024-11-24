@@ -47,7 +47,35 @@ def dashboard():
         flash('You need to login first', 'warning')
         return redirect(url_for('login'))
     
-    return render_template('dashboard.html')
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT * FROM todos WHERE user_id = :user_id"), {'user_id': session['user_id']}).fetchall()
+    
+    todos = [{'id': row.id, 'description': row.description, 'completed': row.completed} for row in result]
+    
+    return render_template('dashboard.html', todos=todos, username=session['username'], user_id=session['user_id'])
+
+@app.route('/add_todo', methods=['POST'])
+def add_todo():
+    if 'user_id' not in session:
+        flash('You need to login first', 'warning')
+        return redirect(url_for('login'))
+    
+    description = request.form['description']
+    
+    with engine.connect() as conn:
+        conn.execute(text("INSERT INTO todos (user_id, description, completed) VALUES (:user_id, :description, :completed)"), 
+                     {'user_id': session['user_id'], 'description': description, 'completed': False})
+        conn.commit()
+    
+    flash('Todo item added!', 'success')
+    return redirect(url_for('dashboard'))
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    session.pop('username', None)
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('login'))
 
 # Uncomment and complete the registration route if needed
 @app.route('/signup', methods=['GET', 'POST'])
@@ -70,5 +98,25 @@ def signup():
     
     return render_template('signup.html')
 
+@app.route('/complete_todo/<int:todo_id>')
+def complete_todo(todo_id):
+    if 'user_id' not in session:
+        flash('You need to login first', 'warning')
+        return redirect(url_for('login'))
+    
+    with engine.connect() as conn:
+        conn.execute(text("UPDATE todos SET completed = :completed WHERE id = :id AND user_id = :user_id"), 
+                     {'completed': True, 'id': todo_id, 'user_id': session['user_id']})
+    conn.commit()
+    
+    flash('Todo item marked as completed!', 'success')
+    return redirect(url_for('dashboard'))
+
 if __name__ == '__main__':
     app.run(debug=True)
+    # Create the todos table
+    with engine.connect() as conn:
+        conn.execute(text("DROP TABLE IF EXISTS todos"))
+        conn.execute(text("CREATE TABLE todos (id INTEGER PRIMARY KEY, user_id INTEGER, description TEXT, completed BOOLEAN, FOREIGN KEY(user_id) REFERENCES users(id))"))
+        conn.commit()
+
