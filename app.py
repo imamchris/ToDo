@@ -104,6 +104,29 @@ def delete_todo(todo_id):
     flash('Todo item deleted!', 'success')
     return redirect(url_for('dashboard'))
 
+@app.route('/edit_todo/<int:todo_id>', methods=['GET', 'POST'])
+def edit_todo(todo_id):
+    if 'user_id' not in session:
+        flash('You need to login first', 'warning')
+        return redirect(url_for('login'))
+    
+    with engine.connect() as conn:
+        todo = conn.execute(text("SELECT * FROM todos WHERE id = :id AND user_id = :user_id"), {'id': todo_id, 'user_id': session['user_id']}).fetchone()
+    
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        
+        with engine.connect() as conn:
+            conn.execute(text("UPDATE todos SET name = :name, description = :description WHERE id = :id AND user_id = :user_id"), 
+                            {'name': name, 'description': description, 'id': todo_id, 'user_id': session['user_id']})
+            conn.commit()
+        
+        flash('Todo item updated!', 'success')
+        return redirect(url_for('dashboard'))
+    
+    return render_template('edit_todo.html', todo=todo)
+
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)

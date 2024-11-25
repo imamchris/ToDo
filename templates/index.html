@@ -5,48 +5,65 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <style>
+            body {
+                background-color: #f8f9fa;
+                color: #343a40;
+                font-family: Arial, sans-serif;
+            }
+
             #top {
-                text-align: left;
-                background-color: darkolivegreen;
-                padding: 10px;
+                text-align: center;
+                background-color: #28a745;
+                padding: 20px;
                 color: white;
+                border-radius: 5px;
+                margin-top: 20px;
             }
 
-            hr{
-                border: 1px solid darkolivegreen;
+            hr {
+                border: 1px solid #28a745;
+                margin: 20px 0;
             }
 
-            body{
-                color:white
+            #box {
+                background-color: white;
+                padding: 20px;
+                color: #343a40;
+                margin-top: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
 
-            #box{
-                background-color: black;
-                padding: 10px;
-                color: white;
-                margin-top: 10px;
+            .btn-primary {
+                background-color: #007bff;
+                border-color: #007bff;
             }
-             
+
+            .btn-secondary {
+                background-color: #6c757d;
+                border-color: #6c757d;
+            }
+
+            .d-flex {
+                justify-content: center;
+                gap: 10px;
+            }
         </style>
 
         <title>Homepage</title>
     </head>
     
-    <header>    
-        <div class="container", id="top">
+    <body>
+        <div class="container" id="top">
             <h1 class="mt-5">To Do List</h1>
         </div>
-    </header>
     
-    <hr>
+        <hr>
 
-    <body>
-    
-
-        <div class="container", id="box">
-            <p>Welcome to the St Augustine ToDo List please enter your login details</p>
+        <div class="container" id="box">
+            <p class="text-center">Welcome to the St Augustine ToDo List. Please enter your login details:</p>
             
-            <div class="d-flex gap-2">
+            <div class="d-flex">
                 <form action="{{ url_for('login') }}" method="get">
                     <button type="submit" class="btn btn-primary">Login</button>
                 </form>
