@@ -27,11 +27,17 @@
         }
         .todo-item input[type="text"] {
             width: 200px;
+            margin-right: 10px;
         }
         .todo-item button {
             margin-left: 5px;
         }
+        .todo-item div {
+            display: flex;
+            align-items: center;
+        }
     </style>
+
 </head>
 <body>
     <div class="container">
@@ -39,6 +45,9 @@
             <h1>Welcome, {{ username }}</h1>
             <p>User ID: {{ user_id }}</p>
         </div>
+
+        <br>
+
         <div class="card">
             <div class="card-header">
                 <h2>To-Do List</h2>
@@ -65,6 +74,9 @@
                 {% endfor %}
             </ul>
         </div>
+        
+        <br>
+        
         <div class="card mt-4">
             <div class="card-header">
                 <h2>Add a new To-Do</h2>
@@ -75,13 +87,21 @@
                     <button type="submit" class="btn btn-primary">Add</button>
                 </form>
             </div>
+       
+        <br>
+       
         </div>
         <form action="{{ url_for('logout') }}" method="get" class="mt-4">
             <button type="submit" class="btn btn-secondary">Logout</button>
         </form>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        
+        <br><br>
+
+        </div>
+    
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

@@ -57,13 +57,20 @@
         {% endwith %}
     </div>
 
-    <footer class="footer mt-auto py-3 bg-light">
-        <div class="container">
-            <form action="{{ url_for('home') }}" method="get">
-                <button type="submit" class="btn btn-secondary">Home</button>
-            </form>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <form action="{{ url_for('home') }}" method="get">
+                            <button type="submit" class="btn btn-secondary">Home</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-    </footer>
+    </div>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
