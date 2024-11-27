@@ -122,9 +122,11 @@ def edit_todo(todo_id):
         name = request.form.get('name')
         description = request.form.get('description')
         
-        with engine.connect() as conn:
-            conn.execute(text("UPDATE todos SET name = :name, description = :description WHERE id = :id AND user_id = :user_id"), 
-                            {'name': name, 'description': description, 'id': todo_id, 'user_id': session['user_id']})
+        due_date = request.form.get('due_date')
+        
+        with engine.begin() as conn:
+            conn.execute(text("UPDATE todos SET name = :name, description = :description, due_date = :due_date WHERE id = :id AND user_id = :user_id"), 
+                    {'name': name, 'description': description, 'due_date': due_date, 'id': todo_id, 'user_id': session['user_id']})
             conn.commit()
         
         flash('Todo item updated!', 'success')
