@@ -29,7 +29,7 @@
         }
         .todo-item input[type="text"] {
             width: 200px;
-            margin-right: 5px;
+            margin-right: 1px;
         }
         .todo-item button {
             margin-left: 5px;
@@ -39,7 +39,10 @@
             align-items: center;
         }
         .todo-item form + form {
-            margin-left: 10px;
+            margin-left: 2px; /* Reduced the margin to make buttons closer */
+        }
+        .todo-item input[type="checkbox"] {
+            margin-right: 8px; /* Added margin to the checkbox */
         }
         .completed {
             text-decoration: line-through;
@@ -61,6 +64,7 @@
             <form action="{{ url_for('add_todo') }}" method="post" class="form-inline">
                 <div class="form-group">
                 <input type="text" name="description" placeholder="Description" class="form-control mr-2">
+                <input type="date" name="due_date" class="form-control mr-2">
                 <button type="submit" class="btn btn-primary">Add</button>
                 </div>
             </form>
@@ -74,17 +78,22 @@
             <ul class="list-group list-group-flush">
                 {% for todo in todos %}
                     <li class="list-group-item todo-item">
-                        <span class="{% if todo.completed %}completed{% endif %}">{{ todo.description }}</span>
+                        <span>
+                            <span class="{% if todo.completed %}completed{% endif %}">{{ todo.description }}</span> - Due: <span>{% if todo.due_date %}{{ todo.due_date }}{% else %}No due date{% endif %}</span>
+                        </span>
                         <div>
                             <form action="{{ url_for('complete_todo', todo_id=todo.id) }}" method="post">
                                 <input type="checkbox" name="completed" style="transform: scale(1.5);" onchange="this.form.submit()" {% if todo.completed %}checked{% endif %}>
                             </form>
-                            <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post">
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
+                            
                             <form action="{{ url_for('edit_todo', todo_id=todo.id) }}" method="post">
                                 <input type="text" name="description" placeholder="New description" class="form-control form-control-sm">
+                                <input type="date" name="due_date" class="form-control form-control-sm">
                                 <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+                            </form>
+
+                            <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
                         </div>
                     </li>
