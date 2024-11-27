@@ -84,11 +84,16 @@ def complete_todo(todo_id):
         return redirect(url_for('login'))
     
     with engine.connect() as conn:
-        conn.execute(text("UPDATE todos SET completed = :completed WHERE id = :id AND user_id = :user_id"), 
-                     {'completed': True, 'id': todo_id, 'user_id': session['user_id']})
-    conn.commit()
+        todo = conn.execute(text("SELECT completed FROM todos WHERE id = :id AND user_id = :user_id"), {'id': todo_id, 'user_id': session['user_id']}).fetchone()
+        if todo:
+            new_status = not todo.completed
+            conn.execute(text("UPDATE todos SET completed = :completed WHERE id = :id AND user_id = :user_id"), 
+                         {'completed': new_status, 'id': todo_id, 'user_id': session['user_id']})
+            conn.commit()
+            flash('Todo item completion status updated!', 'success')
+        else:
+            flash('Todo item not found', 'danger')
     
-    flash('Todo item marked as completed!', 'success')
     return redirect(url_for('dashboard'))
 
 @app.route('/delete_todo/<int:todo_id>', methods=['POST'])
@@ -162,3 +167,4 @@ def signup():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    

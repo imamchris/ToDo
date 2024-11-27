@@ -41,6 +41,10 @@
         .todo-item form + form {
             margin-left: 10px;
         }
+        .completed {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
     </style>
 </head>
 <body>
@@ -70,7 +74,7 @@
             <ul class="list-group list-group-flush">
                 {% for todo in todos %}
                     <li class="list-group-item todo-item">
-                        <span>{{ todo.description }}</span>
+                        <span class="{% if todo.completed %}completed{% endif %}">{{ todo.description }}</span>
                         <div>
                             <form action="{{ url_for('complete_todo', todo_id=todo.id) }}" method="post">
                                 <input type="checkbox" name="completed" style="transform: scale(1.5);" onchange="this.form.submit()" {% if todo.completed %}checked{% endif %}>
