@@ -16,7 +16,7 @@ with engine.connect() as conn:
     conn.execute(text("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password_hash TEXT)"))
     conn.execute(text("INSERT OR IGNORE INTO users (username, password_hash) VALUES ('testuser', :password_hash)"), {'password_hash': generate_password_hash('testpassword')})
     conn.execute(text("DROP TABLE IF EXISTS todos"))
-    conn.execute(text("CREATE TABLE todos (id INTEGER PRIMARY KEY, user_id INTEGER, name TEXT, description TEXT, completed BOOLEAN, FOREIGN KEY(user_id) REFERENCES users(id))"))
+    conn.execute(text("CREATE TABLE todos (id INTEGER PRIMARY KEY, user_id INTEGER, name TEXT, description TEXT, completed BOOLEAN, due_date TEXT, FOREIGN KEY(user_id) REFERENCES users(id))"))
     conn.commit()
 
 # Home
@@ -56,7 +56,7 @@ def dashboard():
     with engine.connect() as conn:
         result = conn.execute(text("SELECT * FROM todos WHERE user_id = :user_id"), {'user_id': session['user_id']}).fetchall()
     
-    todos = [{'id': row.id, 'name': row.name, 'description': row.description, 'completed': row.completed} for row in result]
+    todos = [{'id': row.id, 'name': row.name, 'description': row.description, 'completed': row.completed, 'due_date': row.due_date} for row in result]
     
     return render_template('dashboard.html', todos=todos, username=session['username'], user_id=session['user_id'])
 
@@ -65,15 +65,16 @@ def add_todo():
     if 'user_id' not in session:
         flash('You need to login first', 'warning')
         return redirect(url_for('login'))
-    
+
     name = request.form.get('name')
     description = request.form.get('description')
-    
+    due_date = request.form.get('due_date')  # Get due date from form
+
     with engine.connect() as conn:
-        conn.execute(text("INSERT INTO todos (user_id, name, description, completed) VALUES (:user_id, :name, :description, :completed)"), 
-                     {'user_id': session['user_id'], 'name': name, 'description': description, 'completed': False})
+        conn.execute(text("INSERT INTO todos (user_id, name, description, completed, due_date) VALUES (:user_id, :name, :description, :completed, :due_date)"), 
+                     {'user_id': session['user_id'], 'name': name, 'description': description, 'completed': False, 'due_date': due_date})
         conn.commit()
-    
+
     flash('Todo item added!', 'success')
     return redirect(url_for('dashboard'))
 
@@ -87,8 +88,7 @@ def complete_todo(todo_id):
         todo = conn.execute(text("SELECT completed FROM todos WHERE id = :id AND user_id = :user_id"), {'id': todo_id, 'user_id': session['user_id']}).fetchone()
         if todo:
             new_status = not todo.completed
-            conn.execute(text("UPDATE todos SET completed = :completed WHERE id = :id AND user_id = :user_id"), 
-                         {'completed': new_status, 'id': todo_id, 'user_id': session['user_id']})
+            conn.execute(text("UPDATE todos SET completed = :completed WHERE id = :id AND user_id = :user_id"), {'completed': new_status, 'id': todo_id, 'user_id': session['user_id']})
             conn.commit()
             flash('Todo item completion status updated!', 'success')
         else:
