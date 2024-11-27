@@ -5,43 +5,43 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <style>
-            body {
-                background-color: #f8f9fa;
-                color: #343a40;
-                font-family: Arial, sans-serif;
-            }
-
             #top {
                 text-align: center;
-                background-color: #28a745;
+                background-color: #4CAF50;
                 padding: 20px;
                 color: white;
                 border-radius: 5px;
                 margin-top: 20px;
             }
 
-            hr {
-                border: 1px solid #28a745;
-                margin: 20px 0;
-            }
-
             #box {
                 background-color: white;
                 padding: 20px;
-                color: #343a40;
+                color: #333;
                 margin-top: 20px;
                 border-radius: 5px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
 
             .btn-primary {
-                background-color: #007bff;
-                border-color: #007bff;
+                background-color: #004494;
+                border-color: #004494;
+            }
+
+            .btn-primary:hover {
+                background-color: #FFD700;
+                border-color: #FFD700;
             }
 
             .btn-secondary {
-                background-color: #6c757d;
-                border-color: #6c757d;
+                background-color: #004494;
+                border-color: #004494;
+            }
+
+            .btn-secondary:hover {
+                background-color: #FFD700;
+                border-color: #FFD700;
+                color: white;
             }
 
             .d-flex {
@@ -54,15 +54,16 @@
     </head>
     
     <body>
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #004494; padding: 10px;">
+            <a class="navbar-brand" href="#" style="color: white;">To Do List</a>
+        </nav>
+
         <div class="container" id="top">
-            <h1 class="mt-5">To Do List</h1>
-        </div>
-    
-        <hr>
+            <h1>Welcome to the St Augustine ToDo List</h1>
+            <p>Please login or signup to continue</p>
 
         <div class="container" id="box">
-            <p class="text-center">Welcome to the St Augustine ToDo List. Please enter your login details:</p>
-            
+                
             <div class="d-flex">
                 <form action="{{ url_for('login') }}" method="get">
                     <button type="submit" class="btn btn-primary">Login</button>
@@ -71,7 +72,7 @@
                 <form action="{{ url_for('signup') }}" method="get">
                     <button type="submit" class="btn btn-secondary">Signup</button>
                 </form>
-            </div>
+
         </div>
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
