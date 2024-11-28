@@ -8,9 +8,10 @@
     <style>
         body {
             background-color: #f8f9fa;
+            padding-top: 70px; /* Added padding to avoid content being hidden behind the navbar */
         }
         .container {
-            margin-top: 50px;
+            margin-top: 20px;
         }
         .todo-item {
             display: flex;
@@ -48,65 +49,106 @@
             text-decoration: line-through;
             color: #6c757d;
         }
+        #top {
+            text-align: center;
+            background-color: #4CAF50;
+            padding: 20px;
+            color: white;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        #box {
+            background-color: white;
+            padding: 20px;
+            color: #333;
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #004494;
+            border-color: #004494;
+        }
+        .btn-primary:hover {
+            background-color: #FFD700;
+            border-color: #FFD700;
+        }
+        .btn-secondary {
+            background-color: #004494;
+            border-color: #004494;
+        }
+        .btn-secondary:hover {
+            background-color: #FFD700;
+            border-color: #FFD700;
+            color: white;
+        }
+        .d-flex {
+            justify-content: center;
+            gap: 10px;
+        }
+        .card {
+            margin-bottom: 20px; /* Added margin to separate cards */
+        }
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: #004494; padding: 10px;">
+        <a class="navbar-brand" href="#" style="color: white;">To Do List</a>
+    </nav>
+
     <div class="container">
-        <div class="jumbotron text-center">
-            <h1>Welcome, {{ username }}</h1>
-            <p>User ID: {{ user_id }}</p>
-        </div>
-        <div class="card mt-4">
-            <div class="card-header">
+        <h2>Welcome, {{ username }}</h2>
+        <p>User ID: {{ user_id }}</p>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">
             <h2>Add a new To-Do</h2>
-            </div>
-            <div class="card-body">
+        </div>
+        <div class="card-body">
             <form action="{{ url_for('add_todo') }}" method="post" class="form-inline">
                 <div class="form-group">
-                <input type="text" name="description" placeholder="Description" class="form-control mr-2">
-                <input type="date" name="due_date" class="form-control mr-2">
-                <button type="submit" class="btn btn-primary">Add</button>
+                    <input type="text" name="description" placeholder="Description" class="form-control mr-2">
+                    <input type="date" name="due_date" class="form-control mr-2">
+                    <button type="submit" class="btn btn-primary">Add</button>
                 </div>
             </form>
-            </div>
         </div>
+    </div>
 
-        <div class="card mt-4">
-            <div class="card-header">
-                <h2>To-Do List</h2>
-            </div>
-            <ul class="list-group list-group-flush">
-                {% for todo in todos %}
-                    <li class="list-group-item todo-item">
-                        <span>
-                            <span class="{% if todo.completed %}completed{% endif %}">{{ todo.description }}</span> - Due: <span>{% if todo.due_date %}{{ todo.due_date }}{% else %}No due date{% endif %}</span>
-                        </span>
-                        <div>
-                            <form action="{{ url_for('complete_todo', todo_id=todo.id) }}" method="post">
-                                <input type="checkbox" name="completed" style="transform: scale(1.5);" onchange="this.form.submit()" {% if todo.completed %}checked{% endif %}>
-                            </form>
-                            
-                            <form action="{{ url_for('edit_todo', todo_id=todo.id) }}" method="post">
-                                <input type="text" name="description" placeholder="New description" class="form-control form-control-sm">
-                                <input type="date" name="due_date" class="form-control form-control-sm">
-                                <button type="submit" class="btn btn-primary btn-sm">Edit</button>
-                            </form>
-
-                            <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post">
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
+    <div class="card mt-4">
+        <div class="card-header">
+            <h2>To-Do List</h2>
         </div>
+        <ul class="list-group list-group-flush">
+            {% for todo in todos %}
+                <li class="list-group-item todo-item">
+                    <span>
+                        <span class="{% if todo.completed %}completed{% endif %}">{{ todo.description }}</span> - Due: <span>{% if todo.due_date %}{{ todo.due_date }}{% else %}No due date{% endif %}</span>
+                    </span>
+                    <div>
+                        <form action="{{ url_for('complete_todo', todo_id=todo.id) }}" method="post">
+                            <input type="checkbox" name="completed" style="transform: scale(1.5);" onchange="this.form.submit()" {% if todo.completed %}checked{% endif %}>
+                        </form>
+                        <form action="{{ url_for('edit_todo', todo_id=todo.id) }}" method="post">
+                            <input type="text" name="description" placeholder="New description" class="form-control form-control-sm">
+                            <input type="date" name="due_date" class="form-control form-control-sm">
+                            <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+                        </form>
+                        <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 
-        <div class="text-center mt-4">
-            <hr>
-            <form action="{{ url_for('logout') }}" method="get">
-                <button type="submit" class="btn btn-secondary">Logout</button>
-            </form>
-        </div>
+    <div class="text-center mt-4">
+        <hr>
+        <form action="{{ url_for('logout') }}" method="get">
+            <button type="submit" class="btn btn-secondary">Logout</button>
+        </form>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
