@@ -82,6 +82,10 @@
             border-color: #FFD700;
             color: white;
         }
+        .btn-logout:hover {
+            background-color: #FF0000;
+            border-color: #FF0000;
+        }
         .d-flex {
             justify-content: center;
             gap: 10px;
@@ -89,16 +93,39 @@
         .card {
             margin-bottom: 20px; /* Added margin to separate cards */
         }
+        .dropdown-menu-right {
+            right: 0;
+            left: auto;
+        }
+        .list-group-item {
+            margin: 0 15px; /* Added margin to avoid touching the edges */
+        }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: #004494; padding: 10px;">
         <a class="navbar-brand" href="#" style="color: white;">To Do List</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">
+                        Profile
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
+                        <a class="dropdown-item" href="#">User ID: {{ user_id }}</a>
+                        <a class="dropdown-item" href="#">Username: {{ username }}</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </nav>
 
-    <div class="container">
-        <h2>Welcome, {{ username }}</h2>
-        <p>User ID: {{ user_id }}</p>
+    <div class="container text-center">
+        <div id="top">
+            <h2>Your To-Do List</h2>
+        </div>
     </div>
 
     <div class="card mt-4">
@@ -108,7 +135,8 @@
         <div class="card-body">
             <form action="{{ url_for('add_todo') }}" method="post" class="form-inline">
                 <div class="form-group">
-                    <input type="text" name="description" placeholder="Description" class="form-control mr-2">
+                    <input type="text" name="name" placeholder="Name" class="form-control mr-2" required>
+                    <input type="text" name="description" placeholder="Description" class="form-control mr-2" required>
                     <input type="date" name="due_date" class="form-control mr-2">
                     <button type="submit" class="btn btn-primary">Add</button>
                 </div>
@@ -116,21 +144,23 @@
         </div>
     </div>
 
-    <div class="card mt-4">
-        <div class="card-header">
-            <h2>To-Do List</h2>
-        </div>
-        <ul class="list-group list-group-flush">
+    <div class="container text-center mt-4">
+        <h3>Your Tasks</h3>
+    </div>
+    <ul class="list-group list-group-flush">
+        {% if todos %}
             {% for todo in todos %}
-                <li class="list-group-item todo-item">
+                {% set days_left = (todo.due_date - current_date).days if todo.due_date else None %}
+                <li class="list-group-item todo-item {% if days_left is not none and days_left <= 3 %}bg-danger{% elif days_left is not none and days_left <= 7 %}bg-warning{% else %}bg-light{% endif %}">
                     <span>
-                        <span class="{% if todo.completed %}completed{% endif %}">{{ todo.description }}</span> - Due: <span>{% if todo.due_date %}{{ todo.due_date }}{% else %}No due date{% endif %}</span>
+                        <strong>{{ todo.name }}</strong>: <span class="{% if todo.completed %}completed{% endif %}">{{ todo.description }}</span> - Due: <span>{% if todo.due_date %}{{ todo.due_date }}{% else %}No due date{% endif %}</span>
                     </span>
                     <div>
                         <form action="{{ url_for('complete_todo', todo_id=todo.id) }}" method="post">
                             <input type="checkbox" name="completed" style="transform: scale(1.5);" onchange="this.form.submit()" {% if todo.completed %}checked{% endif %}>
                         </form>
                         <form action="{{ url_for('edit_todo', todo_id=todo.id) }}" method="post">
+                            <input type="text" name="name" placeholder="New name" class="form-control form-control-sm">
                             <input type="text" name="description" placeholder="New description" class="form-control form-control-sm">
                             <input type="date" name="due_date" class="form-control form-control-sm">
                             <button type="submit" class="btn btn-primary btn-sm">Edit</button>
@@ -141,13 +171,15 @@
                     </div>
                 </li>
             {% endfor %}
-        </ul>
-    </div>
+        {% else %}
+            <li class="list-group-item text-center">There are no tasks right now.</li>
+        {% endif %}
+    </ul>
 
     <div class="text-center mt-4">
         <hr>
         <form action="{{ url_for('logout') }}" method="get">
-            <button type="submit" class="btn btn-secondary">Logout</button>
+            <button type="submit" class="btn btn-secondary btn-logout">Logout</button>
         </form>
     </div>
 
