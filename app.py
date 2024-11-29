@@ -89,8 +89,12 @@ def add_todo():
         return redirect(url_for('login'))
 
     name = request.form.get('name')
-    description = request.form.get('description')
+    description = request.form.get('description', '')  # Get description from form, default to empty string
     due_date = request.form.get('due_date')  # Get due date from form
+
+    if not name or not due_date:
+        flash('Name and due date are required!', 'danger')
+        return redirect(url_for('dashboard'))
 
     with engine.connect() as conn:
         conn.execute(text("INSERT INTO todos (user_id, name, description, completed, due_date) VALUES (:user_id, :name, :description, :completed, :due_date)"), 
