@@ -21,7 +21,6 @@
             border: 1px solid #dee2e6;
             border-radius: 5px;
             margin-bottom: 10px;
-            background-color: #ffffff;
         }
         .todo-item form {
             margin: 0;
@@ -45,7 +44,7 @@
         .todo-item input[type="checkbox"] {
             margin-right: 8px; /* Added margin to the checkbox */
         }
-        .completed {
+        .completed-title {
             text-decoration: line-through;
             color: #6c757d;
         }
@@ -151,9 +150,9 @@
         {% if todos %}
             {% for todo in todos %}
                 {% set days_left = (todo.due_date - current_date).days if todo.due_date else None %}
-                <li class="list-group-item todo-item {% if days_left is not none and days_left <= 3 %}bg-danger{% elif days_left is not none and days_left <= 7 %}bg-warning{% else %}bg-light{% endif %}">
+                <li class="list-group-item todo-item" style="background-color: {% if days_left is not none and days_left < 1 %}#ffcccc{% elif days_left is not none and days_left < 7 %}#fff3cd{% else %}#d4edda{% endif %};">
                     <span>
-                        <strong>{{ todo.name }}</strong>: <span class="{% if todo.completed %}completed{% endif %}">{{ todo.description }}</span> - Due: <span>{% if todo.due_date %}{{ todo.due_date }}{% else %}No due date{% endif %}</span>
+                        <strong class="{% if todo.completed %}completed-title{% endif %}">{{ todo.name }}</strong>: <span>{{ todo.description }}</span> - Due: <span>{% if todo.due_date %}{{ todo.due_date }}{% else %}No due date{% endif %}</span>
                     </span>
                     <div>
                         <form action="{{ url_for('complete_todo', todo_id=todo.id) }}" method="post">
