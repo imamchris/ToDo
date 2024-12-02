@@ -131,9 +131,9 @@ def edit_todo(todo_id):
         todo = conn.execute(text("SELECT * FROM todos WHERE id = :id AND user_id = :user_id"), {'id': todo_id, 'user_id': session['user_id']}).fetchone()
     
     if request.method == 'POST':
-        name = request.form.get('name')
-        description = request.form.get('description')
-        due_date = request.form.get('due_date')
+        name = request.form.get('name') or todo.name
+        description = request.form.get('description') or todo.description
+        due_date = request.form.get('due_date') or todo.due_date
         
         with engine.begin() as conn:
             conn.execute(text("UPDATE todos SET name = :name, description = :description, due_date = :due_date WHERE id = :id AND user_id = :user_id"), 
