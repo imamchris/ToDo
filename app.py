@@ -67,8 +67,23 @@ def dashboard():
         return redirect(url_for('login'))
     
     sort_by = request.args.get('sort_by', 'due_date_asc')
+    sort_column = 'due_date'
+    sort_order = 'ASC'
+    
+    if sort_by == 'due_date_desc':
+        sort_order = 'DESC'
+    elif sort_by == 'name_asc':
+        sort_column = 'name'
+        sort_order = 'ASC'
+    elif sort_by == 'name_desc':
+        sort_column = 'name'
+        sort_order = 'DESC'
+    elif sort_by == 'completed':
+        sort_column = 'completed'
+        sort_order = 'ASC'
+    
     with engine.connect() as conn:
-        todos = conn.execute(text("SELECT * FROM todos WHERE user_id = :user_id"), {'user_id': session['user_id']}).fetchall()
+        todos = conn.execute(text(f"SELECT * FROM todos WHERE user_id = :user_id ORDER BY {sort_column} {sort_order}"), {'user_id': session['user_id']}).fetchall()
     
     # Convert due_date from string to datetime.date
     todos = [
@@ -78,17 +93,6 @@ def dashboard():
         }
         for todo in todos
     ]
-    
-    if sort_by == 'due_date_asc':
-        todos.sort(key=lambda x: (x['due_date'] is None, x['due_date']))
-    elif sort_by == 'due_date_desc':
-        todos.sort(key=lambda x: (x['due_date'] is None, x['due_date']), reverse=True)
-    elif sort_by == 'name_asc':
-        todos.sort(key=lambda x: x['name'])
-    elif sort_by == 'name_desc':
-        todos.sort(key=lambda x: x['name'], reverse=True)
-    elif sort_by == 'completed':
-        todos.sort(key=lambda x: x['completed'])
     
     current_date = datetime.now().date()
     return render_template('dashboard.html', todos=todos, user_id=session['user_id'], username=session['username'], current_date=current_date, sort_by=sort_by)
