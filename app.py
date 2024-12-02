@@ -17,7 +17,7 @@ with engine.connect() as conn:
     conn.execute(text("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password_hash TEXT)"))
     conn.execute(text("INSERT OR IGNORE INTO users (username, password_hash) VALUES ('testuser', :password_hash)"), {'password_hash': generate_password_hash('testpassword')})
     conn.execute(text("DROP TABLE IF EXISTS todos"))
-    conn.execute(text("CREATE TABLE todos (id INTEGER PRIMARY KEY, user_id INTEGER, name TEXT, description TEXT, completed BOOLEAN, due_date TEXT, FOREIGN KEY(user_id) REFERENCES users(id))"))
+    conn.execute(text("CREATE TABLE todos (id INTEGER PRIMARY KEY, user_id INTEGER, name TEXT, description TEXT, completed BOOLEAN, due_date TEXT, category TEXT, FOREIGN KEY(user_id) REFERENCES users(id))"))
     conn.commit()
 
 # Home
@@ -107,14 +107,15 @@ def add_todo():
     name = request.form.get('name')
     description = request.form.get('description', '')  # Get description from form, default to empty string
     due_date = request.form.get('due_date')  # Get due date from form
+    category = request.form.get('category', 'General')  # Get category from form, default to General
 
     if not name or not due_date:
         flash('Name and due date are required!', 'danger')
         return redirect(url_for('dashboard'))
 
     with engine.connect() as conn:
-        conn.execute(text("INSERT INTO todos (user_id, name, description, completed, due_date) VALUES (:user_id, :name, :description, :completed, :due_date)"), 
-                     {'user_id': session['user_id'], 'name': name, 'description': description, 'completed': False, 'due_date': due_date})
+        conn.execute(text("INSERT INTO todos (user_id, name, description, completed, due_date, category) VALUES (:user_id, :name, :description, :completed, :due_date, :category)"), 
+                     {'user_id': session['user_id'], 'name': name, 'description': description, 'completed': False, 'due_date': due_date, 'category': category})
         conn.commit()
 
     flash('Todo item added!', 'success')
@@ -134,10 +135,11 @@ def edit_todo(todo_id):
         name = request.form.get('name') or todo.name
         description = request.form.get('description') or todo.description
         due_date = request.form.get('due_date') or todo.due_date
+        category = request.form.get('category') or todo.category
         
         with engine.begin() as conn:
-            conn.execute(text("UPDATE todos SET name = :name, description = :description, due_date = :due_date WHERE id = :id AND user_id = :user_id"), 
-                            {'name': name, 'description': description, 'due_date': due_date, 'id': todo_id, 'user_id': session['user_id']})
+            conn.execute(text("UPDATE todos SET name = :name, description = :description, due_date = :due_date, category = :category WHERE id = :id AND user_id = :user_id"), 
+                            {'name': name, 'description': description, 'due_date': due_date, 'category': category, 'id': todo_id, 'user_id': session['user_id']})
             conn.commit()
         
         flash('Todo item updated!', 'success')

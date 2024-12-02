@@ -155,6 +155,13 @@
                     <input type="text" name="name" placeholder="Name" class="form-control mr-2" required>
                     <input type="text" name="description" placeholder="Description" class="form-control mr-2">
                     <input type="date" name="due_date" class="form-control mr-2" required>
+                    <select name="category" class="form-control mr-2">
+                        <option value="General">General</option>
+                        <option value="Co-Curricular">Co-Curricular</option>
+                        <option value="School">School</option>
+                        <option value="Assignments">Assignments</option>
+                        <option value="Personal">Personal</option>
+                    </select>
                     <button type="submit" class="btn btn-primary">Add</button>
                 </div>
             </form>
@@ -165,33 +172,40 @@
         <h3>Your Tasks</h3>
     </div>
     <div class="container text-center mt-4">
-        <form method="get" action="{{ url_for('dashboard') }}">
-            <div class="form-group">
-                <label for="sort_by">Sort by:</label>
-                <select name="sort_by" id="sort_by" class="form-control" style="width: auto; display: inline-block;">
-                    <option value="due_date_asc" {% if sort_by == 'due_date_asc' %}selected{% endif %}>Due Date (Earliest First)</option>
-                    <option value="due_date_desc" {% if sort_by == 'due_date_desc' %}selected{% endif %}>Due Date (Latest First)</option>
-                    <option value="name_asc" {% if sort_by == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
-                    <option value="name_desc" {% if sort_by == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
-                    <option value="completed" {% if sort_by == 'completed' %}selected{% endif %}>Completion Status</option>
-                </select>
-                <button type="submit" class="btn btn-primary">Sort</button>
-            </div>
-        </form>
-    </div>
-    <ul class="list-group list-group-flush">
-        {% if todos %}
-            {% for todo in todos %}
+    <form method="get" action="{{ url_for('dashboard') }}">
+        <div class="form-group">
+            <label for="sort_by">Sort by:</label>
+            <select name="sort_by" id="sort_by" class="form-control" style="width: auto; display: inline-block;">
+                <option value="due_date_asc" {% if sort_by == 'due_date_asc' %}selected{% endif %}>Due Date (Earliest First)</option>
+                <option value="due_date_desc" {% if sort_by == 'due_date_desc' %}selected{% endif %}>Due Date (Latest First)</option>
+                <option value="name_asc" {% if sort_by == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
+                <option value="name_desc" {% if sort_by == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
+                <option value="completed" {% if sort_by == 'completed' %}selected{% endif %}>Completion Status</option>
+            </select>
+            <label for="filter_by_category" class="ml-2">Category:</label>
+            <select name="filter_by_category" id="filter_by_category" class="form-control" style="width: auto; display: inline-block;">
+                <option value="all" {% if filter_by_category == 'all' %}selected{% endif %}>All</option>
+                <option value="General" {% if filter_by_category == 'General' %}selected{% endif %}>General</option>
+                <option value="Co-Curricular" {% if filter_by_category == 'Co-Curricular' %}selected{% endif %}>Co-Curricular</option>
+                <option value="School" {% if filter_by_category == 'School' %}selected{% endif %}>School</option>
+                <option value="Assignments" {% if filter_by_category == 'Assignments' %}selected{% endif %}>Assignments</option>
+                <option value="Personal" {% if filter_by_category == 'Personal' %}selected{% endif %}>Personal</option>
+            </select>
+            <button type="submit" class="btn btn-primary ml-2">Apply</button>
+        </div>
+    </form>
+</div>
+<ul class="list-group list-group-flush">
+    {% if todos %}
+        {% for todo in todos %}
+            {% if filter_by_category == 'all' or todo.category == filter_by_category %}
                 <li class="list-group-item todo-item">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <div>
                             <h5 class="mb-1 {% if todo.completed %}completed-title{% endif %}" style="font-size: 1.25rem;">{{ todo.name }}</h5>
                             <p class="mb-1 ml-2" style="line-height: 1.5; font-size: 1rem;"> - {{ todo.description }}</p>
                             <small class="ml-2" style="font-size: 0.875rem;"> : Due: {% if todo.due_date %}{{ todo.due_date }}{% else %}No due date{% endif %}</small>
-                             </div>
-
-                        <div class="d-flex align-items-center" style="gap: 2px;"> <!-- Further reduced gap to 2px -->
-                            </div>
+                            <small class="ml-2" style="font-size: 0.875rem;">: Category: {{ todo.category }}</small>
                         </div>
                         <div class="d-flex align-items-center" style="gap: 2px;"> <!-- Further reduced gap to 2px -->
                             <form action="{{ url_for('complete_todo', todo_id=todo.id) }}" method="post" class="mr-1"> <!-- Reduced margin-right to 1px -->
@@ -210,17 +224,25 @@
                                     <input type="text" name="name" placeholder="Name (e.g., Buy groceries)" class="form-control form-control-sm mb-2 mr-2" value="{{ todo.name }}" style="width: auto; display: inline-block;">
                                     <input type="text" name="description" placeholder="Description" class="form-control form-control-sm mb-2 mr-2" value="{{ todo.description }}" style="width: auto; display: inline-block;">
                                     <input type="date" name="due_date" class="form-control form-control-sm mb-2 mr-2" value="{{ todo.due_date }}" style="width: auto; display: inline-block;">
+                                    <select name="category" class="form-control form-control-sm mb-2 mr-2" style="width: auto; display: inline-block;">
+                                        <option value="General" {% if todo.category == 'General' %}selected{% endif %}>General</option>
+                                        <option value="Co-Curricular" {% if todo.category == 'Co-Curricular' %}selected{% endif %}>Co-Curricular</option>
+                                        <option value="School" {% if todo.category == 'School' %}selected{% endif %}>School</option>
+                                        <option value="Assignments" {% if todo.category == 'Assignments' %}selected{% endif %}>Assignments</option>
+                                        <option value="Personal" {% if todo.category == 'Personal' %}selected{% endif %}>Personal</option>
+                                    </select>
                                     <button type="submit" class="btn btn-primary btn-sm mb-2" style="display: inline-block;">Save</button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </li>
-            {% endfor %}
-        {% else %}
-            <li class="list-group-item text-center">There are no tasks right now.</li>
-        {% endif %}
-    </ul>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <li class="list-group-item text-center">There are no tasks right now.</li>
+    {% endif %}
+</ul>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
