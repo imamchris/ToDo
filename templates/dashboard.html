@@ -206,10 +206,12 @@
                     <div id="edit-container-{{ todo.id }}" class="edit-container">
                         <form action="{{ url_for('edit_todo', todo_id=todo.id) }}" method="post" onsubmit="toggleEditForm('{{ todo.id }}')">
                             <div class="form-group">
-                                <input type="text" name="name" placeholder="Name" class="form-control form-control-sm mb-2" value="{{ request.form.name or todo.name }}">
-                                <input type="text" name="description" placeholder="Description" class="form-control form-control-sm mb-2" value="{{ request.form.description or todo.description }}">
-                                <input type="date" name="due_date" class="form-control form-control-sm mb-2" value="{{ request.form.due_date or todo.due_date }}">
-                                <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                                <div class="d-flex align-items-center">
+                                    <input type="text" name="name" placeholder="Name (e.g., Buy groceries)" class="form-control form-control-sm mb-2 mr-2" value="{{ request.form.name or todo.name }}" style="width: auto; display: inline-block;">
+                                    <input type="text" name="description" placeholder="Description" class="form-control form-control-sm mb-2 mr-2" value="{{ request.form.description or todo.description }}" style="width: auto; display: inline-block;">
+                                    <input type="date" name="due_date" class="form-control form-control-sm mb-2 mr-2" value="{{ request.form.due_date or todo.due_date }}" style="width: auto; display: inline-block;">
+                                    <button type="submit" class="btn btn-primary btn-sm mb-2" style="display: inline-block;">Save</button>
+                                </div>
                             </div>
                         </form>
                     </div>
