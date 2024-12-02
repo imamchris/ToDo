@@ -67,23 +67,21 @@ def dashboard():
         return redirect(url_for('login'))
     
     sort_by = request.args.get('sort_by', 'due_date_asc')
-    sort_column = 'due_date'
-    sort_order = 'ASC'
-    
-    if sort_by == 'due_date_desc':
-        sort_order = 'DESC'
-    elif sort_by == 'name_asc':
-        sort_column = 'name'
-        sort_order = 'ASC'
-    elif sort_by == 'name_desc':
-        sort_column = 'name'
-        sort_order = 'DESC'
-    elif sort_by == 'completed':
-        sort_column = 'completed'
-        sort_order = 'ASC'
+    filter_by_category = request.args.get('filter_by_category', 'all')
+    sort_options = {
+        'due_date_asc': 'due_date ASC',
+        'due_date_desc': 'due_date DESC',
+        'name_asc': 'name ASC',
+        'name_desc': 'name DESC',
+        'completed': 'completed ASC'
+    }
+    sort_query = sort_options.get(sort_by, 'due_date ASC')
     
     with engine.connect() as conn:
-        todos = conn.execute(text(f"SELECT * FROM todos WHERE user_id = :user_id ORDER BY {sort_column} {sort_order}"), {'user_id': session['user_id']}).fetchall()
+        if filter_by_category == 'all':
+            todos = conn.execute(text(f"SELECT * FROM todos WHERE user_id = :user_id ORDER BY {sort_query}"), {'user_id': session['user_id']}).fetchall()
+        else:
+            todos = conn.execute(text(f"SELECT * FROM todos WHERE user_id = :user_id AND category = :category ORDER BY {sort_query}"), {'user_id': session['user_id'], 'category': filter_by_category}).fetchall()
     
     # Convert due_date from string to datetime.date
     todos = [
@@ -95,7 +93,7 @@ def dashboard():
     ]
     
     current_date = datetime.now().date()
-    return render_template('dashboard.html', todos=todos, user_id=session['user_id'], username=session['username'], current_date=current_date, sort_by=sort_by)
+    return render_template('dashboard.html', todos=todos, user_id=session['user_id'], username=session['username'], current_date=current_date, sort_by=sort_by, filter_by_category=filter_by_category)
 
 # Add ToDo
 @app.route('/add_todo', methods=['POST'])
