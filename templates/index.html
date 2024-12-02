@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
         <style>
             #top {
                 text-align: center;
@@ -61,9 +62,9 @@
         <div class="container" id="top">
             <h1>Welcome to the St Augustine ToDo List</h1>
             <p>Please login or signup to continue</p>
+        </div>
 
         <div class="container" id="box">
-                
             <div class="d-flex">
                 <form action="{{ url_for('login') }}" method="get">
                     <button type="submit" class="btn btn-primary">Login</button>
@@ -72,8 +73,14 @@
                 <form action="{{ url_for('signup') }}" method="get">
                     <button type="submit" class="btn btn-secondary">Signup</button>
                 </form>
-
+            </div>
         </div>
+
+        <footer class="footer mt-auto py-3 bg-light">
+            <div class="container text-center">
+                <span class="text-muted">&copy; 2023 MyApp. All rights reserved.</span>
+            </div>
+        </footer>
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
