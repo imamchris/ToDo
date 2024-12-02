@@ -66,6 +66,7 @@ def dashboard():
         flash('You need to login first', 'warning')
         return redirect(url_for('login'))
     
+    sort_by = request.args.get('sort_by', 'due_date_asc')
     with engine.connect() as conn:
         todos = conn.execute(text("SELECT * FROM todos WHERE user_id = :user_id"), {'user_id': session['user_id']}).fetchall()
     
@@ -78,8 +79,19 @@ def dashboard():
         for todo in todos
     ]
     
+    if sort_by == 'due_date_asc':
+        todos.sort(key=lambda x: (x['due_date'] is None, x['due_date']))
+    elif sort_by == 'due_date_desc':
+        todos.sort(key=lambda x: (x['due_date'] is None, x['due_date']), reverse=True)
+    elif sort_by == 'name_asc':
+        todos.sort(key=lambda x: x['name'])
+    elif sort_by == 'name_desc':
+        todos.sort(key=lambda x: x['name'], reverse=True)
+    elif sort_by == 'completed':
+        todos.sort(key=lambda x: x['completed'])
+    
     current_date = datetime.now().date()
-    return render_template('dashboard.html', todos=todos, user_id=session['user_id'], username=session['username'], current_date=current_date)
+    return render_template('dashboard.html', todos=todos, user_id=session['user_id'], username=session['username'], current_date=current_date, sort_by=sort_by)
 
 # Add ToDo
 @app.route('/add_todo', methods=['POST'])
