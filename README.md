@@ -21,6 +21,10 @@ A simple and efficient ToDo application built with Flask and SQLAlchemy, designe
    
 3.  Open the folder containing the files in a UI (i.e Visual Studio Code)  
    
+## Explanation
 
 
+For further information and an explanation of the site watch the video below
+
+https://youtu.be/HesIyvw7mEM
    
