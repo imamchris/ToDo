@@ -263,10 +263,15 @@
     <!-- JavaScript functions for toggling the edit form visibility and ensuring all edit forms are hidden by default -->
     <script>
         function toggleEditForm(id) {
+            // Get the container element by constructing its ID using the provided id parameter
             var container = document.getElementById('edit-container-' + id);
+            
+            // Check if the container is currently not displayed or has no display style set
             if (container.style.display === 'none' || container.style.display === '') {
+                // If true, set the display style to 'block' to make it visible
                 container.style.display = 'block';
             } else {
+                // Otherwise, set the display style to 'none' to hide it
                 container.style.display = 'none';
             }
         }
