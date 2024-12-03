@@ -1,10 +1,16 @@
+<!-- This HTML file represents the dashboard for a To-Do List application. It includes the following sections: -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags for character set and viewport settings -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title of the page -->
     <title>Dashboard</title>
+    <!-- Link to Bootstrap CSS for styling -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Internal CSS styles for custom styling of the dashboard elements -->
     <style>
         body {
             background-color: #f8f9fa;
@@ -108,6 +114,7 @@
             background-color: #f8f9fa;
         }
     </style>
+    <!-- JavaScript functions for toggling the edit form visibility -->
     <script>
         function toggleEditForm(id) {
             var container = document.getElementById('edit-container-' + id);
@@ -120,6 +127,7 @@
     </script>
 </head>
 <body>
+    <!-- Navigation bar with a brand name and profile dropdown -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: #004494; padding: 10px;">
         <a class="navbar-brand" href="#" style="color: white;">To Do List</a>
         <div class="collapse navbar-collapse">
@@ -139,12 +147,14 @@
         </div>
     </nav>
 
+    <!-- Main container with a header for the To-Do list -->
     <div class="container text-center">
         <div id="top">
             <h2>Your To-Do List</h2>
         </div>
     </div>
 
+    <!-- Card for adding a new To-Do item with a form -->
     <div class="card mt-4">
         <div class="card-header">
             <h2>Add a new To-Do</h2>
@@ -168,6 +178,7 @@
         </div>
     </div>
 
+    <!-- Section for sorting and filtering tasks -->
     <div class="container text-center mt-4">
         <h3>Your Tasks</h3>
     </div>
@@ -195,6 +206,8 @@
             </div>
         </form>
     </div>
+
+    <!-- List of To-Do items with options to mark as complete, edit, or delete -->
     <ul class="list-group list-group-flush">
         {% if todos %}
             {% for todo in todos %}
@@ -216,22 +229,21 @@
                             </form>
                         </div>
                     </div>
+                    <!-- Edit form for a specific To-Do item -->
                     <div id="edit-container-{{ todo.id }}" class="edit-container">
-                        <form action="{{ url_for('edit_todo', todo_id=todo.id) }}" method="post" onsubmit="toggleEditForm('{{ todo.id }}')">
+                        <form action="{{ url_for('edit_todo', todo_id=todo.id) }}" method="post">
                             <div class="form-group">
-                                <div class="d-flex align-items-center">
-                                    <input type="text" name="name" placeholder="Name (e.g., Buy groceries)" class="form-control form-control-sm mb-2 mr-2" value="{{ todo.name }}" style="width: auto; display: inline-block;">
-                                    <input type="text" name="description" placeholder="Description" class="form-control form-control-sm mb-2 mr-2" value="{{ todo.description }}" style="width: auto; display: inline-block;">
-                                    <input type="date" name="due_date" class="form-control form-control-sm mb-2 mr-2" value="{{ todo.due_date }}" style="width: auto; display: inline-block;">
-                                    <select name="category" class="form-control form-control-sm mb-2 mr-2" style="width: auto; display: inline-block;">
-                                        <option value="General" {% if todo.category == 'General' %}selected{% endif %}>General</option>
-                                        <option value="Co-Curricular" {% if todo.category == 'Co-Curricular' %}selected{% endif %}>Co-Curricular</option>
-                                        <option value="School" {% if todo.category == 'School' %}selected{% endif %}>School</option>
-                                        <option value="Assignments" {% if todo.category == 'Assignments' %}selected{% endif %}>Assignments</option>
-                                        <option value="Personal" {% if todo.category == 'Personal' %}selected{% endif %}>Personal</option>
-                                    </select>
-                                    <button type="submit" class="btn btn-primary btn-sm mb-2" style="display: inline-block;">Save</button>
-                                </div>
+                                <input type="text" name="name" class="form-control form-control-sm mb-2 mr-2" value="{{ todo.name }}" required>
+                                <input type="text" name="description" class="form-control form-control-sm mb-2 mr-2" value="{{ todo.description }}">
+                                <input type="date" name="due_date" class="form-control form-control-sm mb-2 mr-2" value="{{ todo.due_date }}" style="width: auto; display: inline-block;">
+                                <select name="category" class="form-control form-control-sm mb-2 mr-2" style="width: auto; display: inline-block;">
+                                    <option value="General" {% if todo.category == 'General' %}selected{% endif %}>General</option>
+                                    <option value="Co-Curricular" {% if todo.category == 'Co-Curricular' %}selected{% endif %}>Co-Curricular</option>
+                                    <option value="School" {% if todo.category == 'School' %}selected{% endif %}>School</option>
+                                    <option value="Assignments" {% if todo.category == 'Assignments' %}selected{% endif %}>Assignments</option>
+                                    <option value="Personal" {% if todo.category == 'Personal' %}selected{% endif %}>Personal</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary btn-sm mb-2" style="display: inline-block;">Save</button>
                             </div>
                         </form>
                     </div>
@@ -242,9 +254,11 @@
         {% endif %}
     </ul>
 
+    <!-- External Scripts: jQuery, Popper.js, and Bootstrap JS for enabling interactive features and components -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- JavaScript functions for toggling the edit form visibility and ensuring all edit forms are hidden by default -->
     <script>
         function toggleEditForm(id) {
             var container = document.getElementById('edit-container-' + id);
