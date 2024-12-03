@@ -17,20 +17,9 @@ A simple and efficient ToDo application built with Flask and SQLAlchemy, designe
     git clone https://github.com/imamchris/ToDo.git
     cd ToDo
 
-2. Create a virtual environment and activate it:
-
-    python3 -m venv venv
-    source venv/bin/activate   # On Windows use `venv\Scripts\activate`
-
-3. Install the required dependencies:
-
-   pip install -r requirements.txt
-
-4.  Run the application:
-
-    flask run
-    Access the application:
-    Open your web browser and navigate to http://localhost:5000.
+2.  Make sure all files are in a folder
+   
+3.  Open the folder containing the files in a UI (i.e Visual Studio Code)  
    
 
 
